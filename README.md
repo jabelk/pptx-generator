@@ -10,20 +10,65 @@ A JavaScript library for creating professional PowerPoint presentations programm
 - **Architecture diagrams** - Flow diagrams, vertical stacks, connectors
 - **Image utilities** - Path resolution, base64 encoding
 - **Declarative API** - Build presentations from config objects
+- **Docker support** - No Node.js installation required
 
-## Installation
+## Quick Start with Docker
+
+No npm required! Just create a `config.json` and run:
 
 ```bash
-npm install pptx-generator
+# Pull and run (or build locally)
+docker run -v $(pwd):/workspace ghcr.io/jabelk/pptx-generator config.json output.pptx
+```
+
+Example `config.json`:
+
+```json
+{
+  "theme": "cowork",
+  "slides": [
+    { "type": "title", "title": "My Presentation", "subtitle": "Made with Docker" },
+    { "type": "agenda", "items": ["Topic 1", "Topic 2", "Topic 3"] },
+    { "type": "summary", "message": "Thanks for watching!" }
+  ]
+}
+```
+
+Build the image locally:
+
+```bash
+git clone https://github.com/jabelk/pptx-generator.git
+cd pptx-generator
+docker build -t pptx-generator .
+docker run -v $(pwd)/examples:/workspace pptx-generator config.json my-deck.pptx
+```
+
+## Installation (npm)
+
+```bash
+npm install jabelk/pptx-generator
 ```
 
 Or clone and link locally:
 
 ```bash
-git clone https://github.com/yourorg/pptx-generator.git
+git clone https://github.com/jabelk/pptx-generator.git
 cd pptx-generator
 npm install
 npm link
+```
+
+## CLI Usage
+
+```bash
+# After npm install
+pptx-generator config.json output.pptx
+
+# Or run directly
+node cli.js config.json output.pptx
+
+# Help
+pptx-generator --help
 ```
 
 ## Quick Start

@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "title": "Example Presentation",
+    "author": "PptxGenerator"
+  },
+  "theme": "cowork",
+  "slides": [
+    {
+      "type": "title",
+      "eyebrow": "EXAMPLE",
+      "title": "Docker Demo",
+      "subtitle": "Creating presentations without npm installed",
+      "date": "2024"
+    },
+    {
+      "type": "agenda",
+      "title": "What We'll Cover",
+      "items": [
+        "Why use Docker",
+        "How it works",
+        "Example usage"
+      ],
+      "sectionLabel": "Overview",
+      "pageNum": 2
+    },
+    {
+      "type": "content",
+      "title": "Benefits of Docker",
+      "bullets": [
+        "No Node.js installation required",
+        "Consistent environment across machines",
+        "Easy to integrate into CI/CD pipelines",
+        "Single command to generate presentations"
+      ],
+      "sectionLabel": "Benefits",
+      "pageNum": 3
+    },
+    {
+      "type": "comparison",
+      "title": "With vs Without Docker",
+      "leftTitle": "Without Docker",
+      "leftItems": [
+        "Install Node.js",
+        "Install npm packages",
+        "Run node script"
+      ],
+      "rightTitle": "With Docker",
+      "rightItems": [
+        "docker run command",
+        "That's it!"
+      ],
+      "sectionLabel": "Comparison",
+      "pageNum": 4
+    },
+    {
+      "type": "summary",
+      "eyebrow": "GET STARTED",
+      "message": "docker run -v $(pwd):/workspace \\\n  ghcr.io/jabelk/pptx-generator \\\n  config.json output.pptx"
+    }
+  ]
+}
