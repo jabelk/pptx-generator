@@ -169,10 +169,87 @@ npm install              # Install dependencies
 node examples/basic.js   # Run basic example
 ```
 
+## QA System
+
+Always validate generated presentations before delivery:
+
+```bash
+# Validate content against config
+node qa.js output.pptx config.json
+
+# Extract text only (no config)
+node qa.js output.pptx
+```
+
+The QA tool:
+- Extracts all text from PPTX XML
+- Checks slide count matches config
+- Validates titles, items, cards, bullets are present
+- Returns exit code 0 (pass) or 1 (fail)
+
+## Docker Usage
+
+```bash
+# Generate presentation (no Node.js needed)
+docker run -v $(pwd):/workspace pptx-generator config.json output.pptx
+
+# Build locally
+docker build -t pptx-generator .
+```
+
+## Common Pitfalls (Lessons Learned)
+
+### 1. Agenda Items Format
+The agenda slide accepts BOTH formats:
+```javascript
+// Simple strings
+items: ["Topic 1", "Topic 2", "Topic 3"]
+
+// Objects with description
+items: [
+  { title: "Topic 1", desc: "Details here" },
+  { title: "Topic 2", desc: "More details" }
+]
+```
+
+### 2. Card Content
+Cards support EITHER `description` OR `bullets`:
+```javascript
+// Single description
+cards: [{ title: "Feature", description: "Explanation text" }]
+
+// Bullet list
+cards: [{ title: "Feature", bullets: ["Point 1", "Point 2"] }]
+```
+
+### 3. Slide Variable Names
+When copying slide code, ensure variable names match:
+```javascript
+// WRONG - mixed variable names cause duplicate content
+const slide5 = pptx.addSlide();
+slide4.addText("Title", {...});  // BUG: using old variable
+
+// CORRECT
+const slide5 = pptx.addSlide();
+slide5.addText("Title", {...});
+```
+
+### 4. writeFile API
+Use the object form (string form is deprecated):
+```javascript
+// Correct
+pptx.writeFile({ fileName: 'output.pptx' })
+
+// Deprecated (works but warns)
+pptx.writeFile('output.pptx')
+```
+
 ## Tips for Claude Code
 
 1. **Always use absolute paths** for images - use `resolve()` or full paths
 2. **Check the theme** before using colors - access via `theme.colors.primary`
 3. **Use `addSlide()`** for quick slides, direct functions for custom layouts
-4. **Run examples** to verify output before building complex presentations
+4. **Run QA after generation** - `node qa.js output.pptx config.json`
 5. **Page numbers** are manual - track and increment in your script
+6. **Test with Docker** before shipping - ensures clean environment works
+7. **Read examples/** for working patterns before writing new slide types
