@@ -1,0 +1,4 @@
+node_modules/
+examples/output/*.pptx
+*.pptx
+.DS_Store

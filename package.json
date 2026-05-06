@@ -1,0 +1,26 @@
+{
+  "name": "pptx-generator",
+  "version": "1.0.0",
+  "description": "Professional PowerPoint presentation generator using PptxGenJS with McKinsey-style templates",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "example:basic": "node examples/basic.js",
+    "example:full": "node examples/liz-update.js",
+    "example:diagrams": "node examples/with-diagrams.js"
+  },
+  "keywords": [
+    "pptx",
+    "powerpoint",
+    "presentation",
+    "slides",
+    "pptxgenjs",
+    "mckinsey",
+    "consulting"
+  ],
+  "author": "Jason Belk",
+  "license": "MIT",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  }
+}
