@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "example:basic": "node examples/basic.js",
-    "example:full": "node examples/liz-update.js",
     "example:diagrams": "node examples/with-diagrams.js"
   },
   "keywords": [
@@ -18,7 +17,7 @@
     "mckinsey",
     "consulting"
   ],
-  "author": "Jason Belk",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "pptxgenjs": "^4.0.1"
