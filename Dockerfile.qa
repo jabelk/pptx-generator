@@ -1,0 +1,30 @@
+# QA Dockerfile with LibreOffice for visual inspection
+# Converts PPTX to PDF for visual analysis
+
+FROM node:20-alpine
+
+# Install LibreOffice for PDF conversion
+RUN apk add --no-cache \
+    libreoffice \
+    ttf-freefont \
+    fontconfig \
+    && fc-cache -f
+
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy source code
+COPY src/ ./src/
+COPY cli.js qa.js ./
+
+# Create workspace directory
+RUN mkdir /workspace
+
+WORKDIR /workspace
+
+# Default entrypoint runs QA
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["echo 'Usage: docker run -v $(pwd):/workspace pptx-generator-qa <command>' && echo 'Commands:' && echo '  qa <pptx> [config.json]   - Validate PPTX content' && echo '  topdf <pptx>              - Convert PPTX to PDF' && echo '  generate <config> <out>   - Generate PPTX from config'"]

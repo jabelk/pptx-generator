@@ -1,16 +1,19 @@
 {
   "name": "pptx-generator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Professional PowerPoint presentation generator using PptxGenJS with McKinsey-style templates",
   "main": "src/index.js",
   "bin": {
-    "pptx-generator": "./cli.js"
+    "pptx-generator": "./cli.js",
+    "pptx-qa": "./qa.js"
   },
   "type": "module",
   "scripts": {
     "example:basic": "node examples/basic.js",
     "example:diagrams": "node examples/with-diagrams.js",
+    "qa": "node qa.js",
     "docker:build": "docker build -t pptx-generator .",
+    "docker:build:qa": "docker build -f Dockerfile.qa -t pptx-generator-qa .",
     "docker:example": "docker run -v $(pwd)/examples:/workspace pptx-generator config.json docker-output.pptx"
   },
   "keywords": [
@@ -25,6 +28,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "jszip": "^3.10.1",
     "pptxgenjs": "^4.0.1"
   }
 }

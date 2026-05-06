@@ -79,13 +79,27 @@ export function addCardGrid(slide, theme, options = {}) {
       });
     }
 
-    // Bullets
-    const bulletsY = titleY + (card.title ? 0.5 : 0);
-    if (card.bullets && card.bullets.length > 0) {
+    // Description (single text block) or Bullets (list)
+    const contentY = titleY + (card.title ? 0.5 : 0);
+
+    if (card.description) {
+      // Render description as wrapped text
+      slide.addText(card.description, {
+        x: x + 0.15,
+        y: contentY,
+        w: cardWidth - 0.3,
+        h: height - contentY + y - 0.2,
+        fontSize: 11,
+        fontFace: fonts.body,
+        color: colors.textDark,
+        valign: 'top'
+      });
+    } else if (card.bullets && card.bullets.length > 0) {
+      // Render bullets as list
       card.bullets.forEach((bullet, j) => {
         slide.addText(`• ${bullet}`, {
           x: x + 0.15,
-          y: bulletsY + (j * 0.5),
+          y: contentY + (j * 0.5),
           w: cardWidth - 0.3,
           h: 0.45,
           fontSize: 11,

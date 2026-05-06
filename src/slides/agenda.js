@@ -40,10 +40,15 @@ export function addAgendaSlide(pptx, theme, options = {}) {
 
   addTitle(slide, theme, title);
 
-  // Agenda items
+  // Agenda items - handle both string and object formats
   items.forEach((item, i) => {
     const y = 1.6 + (i * 0.85);
-    const num = item.num || String(i + 1).padStart(2, '0');
+
+    // Normalize item format: strings become {title: string}
+    const normalizedItem = typeof item === 'string' ? { title: item } : item;
+    const num = normalizedItem.num || String(i + 1).padStart(2, '0');
+    const itemTitle = normalizedItem.title || '';
+    const itemDesc = normalizedItem.desc || normalizedItem.description || '';
 
     // Number
     slide.addText(num, {
@@ -58,7 +63,7 @@ export function addAgendaSlide(pptx, theme, options = {}) {
     });
 
     // Title
-    slide.addText(item.title, {
+    slide.addText(itemTitle, {
       x: layout.contentX + 0.85,
       y,
       w: 5,
@@ -70,8 +75,8 @@ export function addAgendaSlide(pptx, theme, options = {}) {
     });
 
     // Description
-    if (item.desc) {
-      slide.addText(item.desc, {
+    if (itemDesc) {
+      slide.addText(itemDesc, {
         x: layout.contentX + 0.85,
         y: y + 0.4,
         w: 10,
