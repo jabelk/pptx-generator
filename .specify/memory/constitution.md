@@ -2,27 +2,27 @@
 
 Core principles guiding development of this library.
 
-## Design Principles
+## Core Principles
 
-### 1. Declarative First
+### I. Declarative First
 Users should be able to create presentations from simple JSON configs without writing JavaScript. The `buildPresentation()` API and CLI support this pattern.
 
-### 2. Flexible Input Formats
+### II. Flexible Input Formats
 Accept multiple valid input formats where reasonable:
 - Agenda items: both `["string"]` and `[{title, desc}]`
 - Card content: both `description` (string) and `bullets` (array)
 - Don't force users into rigid schemas when alternatives are intuitive
 
-### 3. Fail Loudly, Validate Early
+### III. Fail Loudly, Validate Early
 The QA system exists because silent failures (missing content, empty slides) are worse than errors. Always run `node qa.js` before shipping.
 
-### 4. Absolute Paths for Images
+### IV. Absolute Paths for Images
 PptxGenJS requires absolute paths. This is a hard constraint. Document it prominently and provide `resolveImagePath()` helpers.
 
-### 5. Theme-Driven Consistency
+### V. Theme-Driven Consistency
 All colors, fonts, and spacing should come from the theme object. Never hardcode values in slide builders. This ensures visual consistency.
 
-### 6. Components Over Monoliths
+### VI. Components Over Monoliths
 Break reusable patterns into components (chrome, cards, tables) that can be composed. Slides are built from components, not copy-pasted code.
 
 ## Quality Standards
@@ -67,3 +67,9 @@ Break reusable patterns into components (chrome, cards, tables) that can be comp
 - Should we publish to npm registry?
 - Add TypeScript definitions?
 - Support for slide animations?
+
+## Governance
+
+Constitution supersedes all other practices. Amendments require documentation and testing of all affected slide types.
+
+**Version**: 1.0.0 | **Ratified**: 2024-05-06 | **Last Amended**: 2024-05-06
