@@ -1,255 +1,122 @@
-# PptxGenerator - Claude Code Instructions
+# CLAUDE.md
 
-A reusable library for generating professional PowerPoint presentations programmatically.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Quick Start
+## Project Overview
 
-```javascript
-import { createPresentation, addSlide } from 'pptx-generator';
-
-const pptx = createPresentation({ theme: 'cowork' });
-addSlide(pptx, 'title', { title: 'My Presentation' });
-pptx.writeFile('output.pptx');
-```
-
-## Available Slide Types
-
-| Type | Function | Use Case |
-|------|----------|----------|
-| `title` | `addTitleSlide` | Cover/opening slide with eyebrow, title, subtitle |
-| `agenda` | `addAgendaSlide` | Numbered list of topics |
-| `quote` | `addQuoteSlide` | Large quote with attribution |
-| `comparison` | `addComparisonSlide` | Two-column comparison |
-| `phases` | `addPhasesSlide` | Timeline/roadmap with phase boxes |
-| `workflow` | `addWorkflowSlide` | Process flow with chevron steps |
-| `checklist` | `addChecklistSlide` | Requirements table with status badges |
-| `summary` | `addSummarySlide` | Dark closing slide with key message |
-| `content` | `addContentSlide` | Generic content (bullets, cards, images) |
-| `demo` | `addDemoSlide` | Screenshot/demo slide |
-
-## Themes
-
-- `cowork` - Dark navy (#0D2A5C) with cyan (#049FD9) accents
-- `minimal` - Clean black/white with blue accents
-
-### Custom Theme
-
-```javascript
-import { themes } from 'pptx-generator';
-
-themes.registerTheme('custom', themes.extendTheme('cowork', {
-  colors: { primary: 'FF5500', accent: '00AA00' }
-}));
-```
-
-## Common Patterns
-
-### Content Slide with Bullets
-
-```javascript
-addSlide(pptx, 'content', {
-  title: 'Key Points',
-  subtitle: 'Important information',
-  bullets: ['Point one', 'Point two', 'Point three'],
-  sectionLabel: 'Details',
-  pageNum: 5
-});
-```
-
-### Content Slide with Cards
-
-```javascript
-addSlide(pptx, 'content', {
-  title: 'Features',
-  cards: [
-    { title: 'Fast', description: 'Quick generation' },
-    { title: 'Flexible', description: 'Easy customization' },
-    { title: 'Professional', description: 'McKinsey-style' }
-  ]
-});
-```
-
-### Image Slide
-
-```javascript
-addSlide(pptx, 'content', {
-  title: 'Screenshot',
-  image: {
-    path: '/absolute/path/to/image.png',  // MUST be absolute
-    x: 1.0,
-    y: 1.6,
-    w: 11,
-    h: 5
-  }
-});
-```
-
-### Architecture Diagram
-
-```javascript
-import { addFlowDiagram } from 'pptx-generator/utils/svg';
-
-const slide = pptx.addSlide();
-addFlowDiagram(slide, theme, {
-  boxes: [
-    { label: 'Input', bgColor: theme.colors.primary },
-    { label: 'Process', bgColor: theme.colors.accent },
-    { label: 'Output', bgColor: theme.colors.green }
-  ]
-});
-```
-
-## Image Path Requirements
-
-**CRITICAL**: PptxGenJS requires absolute paths for local images.
-
-```javascript
-import { resolve } from 'path';
-
-// Correct - absolute path
-image: { path: '/Users/name/project/images/screenshot.png' }
-
-// Also correct - use resolve
-image: { path: resolve(import.meta.dirname, '../images/screenshot.png') }
-
-// WRONG - relative paths fail
-image: { path: './images/screenshot.png' }  // Will fail!
-```
-
-## Declarative API
-
-Build entire presentations from config:
-
-```javascript
-import { buildPresentation } from 'pptx-generator';
-
-const pptx = buildPresentation({
-  meta: { title: 'Q4 Review', author: 'Team' },
-  theme: 'cowork',
-  slides: [
-    { type: 'title', title: 'Q4 Review', subtitle: '2024' },
-    { type: 'agenda', items: ['Revenue', 'Growth', 'Plans'] },
-    { type: 'content', title: 'Revenue', bullets: ['Up 20%', 'Beat targets'] },
-    { type: 'summary', message: 'Strong quarter.\nReady for Q1.' }
-  ]
-});
-
-pptx.writeFile('q4-review.pptx');
-```
-
-## Project Structure
-
-```
-pptx-generator/
-├── src/
-│   ├── index.js          # Main exports
-│   ├── themes/           # Theme definitions
-│   │   ├── cowork.js     # Corporate theme
-│   │   └── minimal.js    # Clean theme
-│   ├── slides/           # Slide type builders
-│   │   ├── title.js
-│   │   ├── agenda.js
-│   │   ├── content.js
-│   │   └── ...
-│   ├── components/       # Reusable components
-│   │   ├── chrome.js     # Headers, footers, accent bars
-│   │   ├── takeaway.js   # Callout boxes
-│   │   ├── cards.js      # Card grids
-│   │   └── tables.js     # Data tables
-│   └── utils/            # Helpers
-│       ├── images.js     # Image path resolution
-│       └── svg.js        # Diagram utilities
-└── examples/             # Working examples
-```
+PptxGenerator is a JavaScript library for creating professional PowerPoint presentations programmatically, built on PptxGenJS. It provides 10 slide types, 2 themes, and a QA validation system.
 
 ## Commands
 
 ```bash
-npm install              # Install dependencies
-node examples/basic.js   # Run basic example
-```
+npm install                          # Install dependencies
+npm run example:basic                # Run basic example
+npm run example:diagrams             # Run diagrams example
+node cli.js config.json output.pptx  # Generate from JSON config
+node qa.js output.pptx config.json   # Validate PPTX against config
+node qa.js output.pptx               # Extract text only (inspection)
 
-## QA System
-
-Always validate generated presentations before delivery:
-
-```bash
-# Validate content against config
-node qa.js output.pptx config.json
-
-# Extract text only (no config)
-node qa.js output.pptx
-```
-
-The QA tool:
-- Extracts all text from PPTX XML
-- Checks slide count matches config
-- Validates titles, items, cards, bullets are present
-- Returns exit code 0 (pass) or 1 (fail)
-
-## Docker Usage
-
-```bash
-# Generate presentation (no Node.js needed)
+# Docker
+npm run docker:build                 # Build Docker image
 docker run -v $(pwd):/workspace pptx-generator config.json output.pptx
-
-# Build locally
-docker build -t pptx-generator .
 ```
 
-## Common Pitfalls (Lessons Learned)
+## Architecture
 
-### 1. Agenda Items Format
-The agenda slide accepts BOTH formats:
-```javascript
-// Simple strings
-items: ["Topic 1", "Topic 2", "Topic 3"]
-
-// Objects with description
-items: [
-  { title: "Topic 1", desc: "Details here" },
-  { title: "Topic 2", desc: "More details" }
-]
+```
+User Input (JSON/JS) → Entry Points (cli.js, src/index.js)
+                              ↓
+                    Theme System (src/themes/)
+                              ↓
+                    Slide Builders (src/slides/)
+                              ↓
+                    Components (src/components/)
+                              ↓
+                    PptxGenJS → .pptx file
 ```
 
-### 2. Card Content
-Cards support EITHER `description` OR `bullets`:
-```javascript
-// Single description
-cards: [{ title: "Feature", description: "Explanation text" }]
+**Key modules:**
+- `src/index.js` - Main exports: `createPresentation()`, `addSlide()`, `buildPresentation()`
+- `src/themes/` - Theme definitions (cowork, minimal) with colors, fonts, spacing
+- `src/slides/` - Slide builders: title, agenda, quote, comparison, phases, workflow, checklist, summary, content, demo
+- `src/components/` - Reusable elements: chrome (header/footer/accent bar), cards (grids, numbered), tables (status, data), takeaway (callout boxes)
+- `src/utils/` - Image path handling, SVG diagram primitives
 
-// Bullet list
-cards: [{ title: "Feature", bullets: ["Point 1", "Point 2"] }]
+**Slide builder pattern:**
+```javascript
+export function addXxxSlide(pptx, theme, options) {
+  const slide = pptx.addSlide();
+  slide.background = { color: theme.colors.bgWhite };
+  addChrome(slide, theme, options);  // Header, footer, accent bar
+  addTitle(slide, theme, options.title);
+  // Add slide-specific content...
+  return slide;
+}
 ```
 
-### 3. Slide Variable Names
-When copying slide code, ensure variable names match:
+## Critical Requirements
+
+### Image Paths Must Be Absolute
+
+PptxGenJS requires absolute paths. Relative paths fail silently.
+
 ```javascript
-// WRONG - mixed variable names cause duplicate content
-const slide5 = pptx.addSlide();
-slide4.addText("Title", {...});  // BUG: using old variable
+import { resolve } from 'path';
 
 // CORRECT
-const slide5 = pptx.addSlide();
-slide5.addText("Title", {...});
+image: { path: '/Users/name/project/images/logo.png' }
+image: { path: resolve(import.meta.dirname, '../images/logo.png') }
+
+// WRONG - fails silently
+image: { path: './images/logo.png' }
 ```
 
-### 4. writeFile API
-Use the object form (string form is deprecated):
+### Use Object Form for writeFile
+
 ```javascript
-// Correct
+// CORRECT
 pptx.writeFile({ fileName: 'output.pptx' })
 
-// Deprecated (works but warns)
+// DEPRECATED (works but warns)
 pptx.writeFile('output.pptx')
 ```
 
-## Tips for Claude Code
+### Always Use Theme Colors
 
-1. **Always use absolute paths** for images - use `resolve()` or full paths
-2. **Check the theme** before using colors - access via `theme.colors.primary`
-3. **Use `addSlide()`** for quick slides, direct functions for custom layouts
-4. **Run QA after generation** - `node qa.js output.pptx config.json`
-5. **Page numbers** are manual - track and increment in your script
-6. **Test with Docker** before shipping - ensures clean environment works
-7. **Read examples/** for working patterns before writing new slide types
+Never hardcode colors:
+```javascript
+// WRONG
+slide.addText("Title", { color: '0D2A5C' });
+
+// CORRECT
+slide.addText("Title", { color: theme.colors.primary });
+```
+
+## Input Flexibility
+
+The library normalizes inputs. Both formats work:
+
+```javascript
+// Agenda items - strings or objects
+items: ["Topic 1", "Topic 2"]
+items: [{ title: "Topic 1", desc: "Details" }]
+
+// Cards - description OR bullets (not both)
+cards: [{ title: "Feature", description: "Explanation" }]
+cards: [{ title: "Feature", bullets: ["Point 1", "Point 2"] }]
+```
+
+## Adding New Slide Types
+
+1. Create `src/slides/newtype.js` with `addNewTypeSlide(pptx, theme, options)`
+2. Export from `src/slides/index.js`
+3. Add to `slideBuilders` map in `src/index.js:84`
+
+## QA Validation
+
+Always validate generated presentations:
+```bash
+node qa.js output.pptx config.json  # Exit 0 = pass, 1 = fail
+```
+
+The QA tool extracts all text from PPTX XML and verifies expected content is present.
