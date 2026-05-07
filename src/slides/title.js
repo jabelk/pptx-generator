@@ -69,25 +69,26 @@ export function addTitleSlide(pptx, theme, options = {}) {
     });
   }
 
-  // Main title
+  // Main title - allow room for 2-line titles at 60pt
   if (title) {
     slide.addText(title, {
       x: 1.1,
       y: 1.7,
       w: 10.5,
-      h: 1.2,
+      h: 1.5,
       fontSize: fontSize.title,
       fontFace: fonts.heading,
       bold: true,
-      color: colors.textLight
+      color: colors.textLight,
+      shrinkText: true
     });
   }
 
-  // Subtitle
+  // Subtitle - positioned below title with gap
   if (subtitle) {
     slide.addText(subtitle, {
       x: 1.1,
-      y: 2.85,
+      y: 3.25,
       w: 10.5,
       h: 0.7,
       fontSize: fontSize.subtitle,
@@ -96,20 +97,20 @@ export function addTitleSlide(pptx, theme, options = {}) {
     });
   }
 
-  // Divider line
+  // Divider line - positioned below subtitle
   slide.addShape('rect', {
     x: 1.1,
-    y: 3.85,
+    y: 4.1,
     w: 1.5,
     h: 0.04,
     fill: { color: colors.accent }
   });
 
-  // Tagline
+  // Tagline - positioned below divider
   if (tagline) {
     slide.addText(tagline, {
       x: 1.1,
-      y: 4.05,
+      y: 4.3,
       w: 10.5,
       h: 0.55,
       fontSize: 18,
